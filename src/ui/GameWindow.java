@@ -8,7 +8,7 @@ public class GameWindow {
 
 	public static void show() {
 		// Minimal model instance (empty for now, by design)
-		GameModel model = new GameModel();
+		GameModel model = new GameModel(0, 0, 0, 0, null);
 
 
 		JFrame frame = new JFrame("CSSE220 Final Project");

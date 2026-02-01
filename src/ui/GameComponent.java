@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -15,7 +16,7 @@ public class GameComponent extends JComponent {
 
 
 	public GameComponent(GameModel model) {
-	this.model = model;
+		this.model = model;
 	}
 
 
@@ -25,9 +26,11 @@ public class GameComponent extends JComponent {
 	Graphics2D g2 = (Graphics2D) g;
 
 	// Minimal placeholder to test  it’s running
-	g2.drawString("Final Project Starter: UI is running ✅", 20, 30);
-
+	//g2.drawString("Final Project Starter: UI is running ✅", 20, 30);
+	
+	
 
 	// TODO: draw based on model state
+		
 	}
 }
