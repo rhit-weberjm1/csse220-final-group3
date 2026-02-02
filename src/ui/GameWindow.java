@@ -3,6 +3,7 @@ package ui;
 import javax.swing.JFrame;
 
 import model.GameModel;
+import model.ZombieSprite;
 
 public class GameWindow {
 
@@ -16,6 +17,10 @@ public class GameWindow {
 
 
 		frame.add(new GameComponent(model));
+		
+//		ZombieSprite zombie1 = new ZombieSprite(10,10);
+		
+//		frame.add(new GameComponent(zombie1));
 
 
 		frame.setSize(600, 600);
