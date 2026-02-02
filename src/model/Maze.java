@@ -1,8 +1,6 @@
-package ui;
+package model;
 
 import java.awt.image.BufferedImage;
-
-import model.GameModel;
 
 public class Maze extends GameModel{
 
