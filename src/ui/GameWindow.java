@@ -3,24 +3,25 @@ package ui;
 import javax.swing.JFrame;
 
 import model.GameModel;
+import model.PlayerSprite;
 import model.ZombieSprite;
 
 public class GameWindow {
 
 	public static void show() {
 		// Minimal model instance (empty for now, by design)
-		GameModel model = new GameModel(0, 0, 0, 0, null);
+//		GameModel model = new GameModel(0, 0, 0, 0, null);
 
 
 		JFrame frame = new JFrame("CSSE220 Final Project");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
-		frame.add(new GameComponent(model));
+//		frame.add(new GameComponent(model));
 		
-//		ZombieSprite zombie1 = new ZombieSprite(10,10);
+		PlayerSprite player = new PlayerSprite(10,10);
 		
-//		frame.add(new GameComponent(zombie1));
+		frame.add(new GameComponent(player));
 
 
 		frame.setSize(600, 600);

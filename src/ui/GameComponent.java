@@ -8,22 +8,23 @@ import java.awt.Shape;
 import javax.swing.JComponent;
 
 import model.GameModel;
+import model.PlayerSprite;
 import model.ZombieSprite;
 
 public class GameComponent extends JComponent {
 
 	
 	
-	private GameModel model;
-//	private ZombieSprite zombie;
+//	private GameModel model;
+	private PlayerSprite player;
 
 
-	public GameComponent(GameModel model) {
-		this.model = model;
-	}
-//	public GameComponent(ZombieSprite zombie) {
-//		this.zombie = zombie;
+//	public GameComponent(GameModel model) {
+//		this.model = model;
 //	}
+	public GameComponent(PlayerSprite player) {
+		this.player= player;
+	}
 
 
 	@Override
@@ -34,7 +35,7 @@ public class GameComponent extends JComponent {
 	// Minimal placeholder to test  it’s running
 //	g2.drawString("Final Project Starter: UI is running ✅", 20, 30);
 	
-//	zombie.draw(g2);
+	player.draw(g2);
 
 	// TODO: draw based on model state
 		
