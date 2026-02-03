@@ -21,7 +21,7 @@ public class GameWindow {
 		
 		PlayerSprite player = new PlayerSprite(10,10);
 		
-		frame.add(new GameComponent(player));
+//		frame.add(new GameComponent(player));
 
 
 		frame.setSize(600, 600);

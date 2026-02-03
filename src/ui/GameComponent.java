@@ -24,21 +24,17 @@ public class GameComponent extends JComponent {
 	
 //	private GameModel model;
 	private PlayerSprite player;
-	private static BufferedImage ground = null;
+	private Maze ground;
+//	private static BufferedImage ground = null;
 	private static boolean triedLoad = false;
 
 //	public GameComponent(GameModel model) {
 //		this.model = model;
 //	}
-	public GameComponent(PlayerSprite player) {
-		this.player= player;
-	
-	}
-
-
-	
-	
-
+//	public GameComponent(PlayerSprite player) {
+//		this.player= player;
+//	
+//	}
 
 
 	@Override
@@ -48,10 +44,11 @@ public class GameComponent extends JComponent {
 
 	// Minimal placeholder to test  it’s running
 //	g2.drawString("Final Project Starter: UI is running ✅", 20, 30);
-	
-		
+//	ground.draw(g2);
 		
 		player.draw(g2);
+		
+		
 	
 	// TODO: draw based on model state
 		

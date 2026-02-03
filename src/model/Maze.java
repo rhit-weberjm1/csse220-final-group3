@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 
 
 public class Maze extends GameModel{
+	
+
 
 	public Maze(int x, int y, int height, int width, BufferedImage sprite) {
 		super(x, y, height, width, sprite);
@@ -18,18 +20,23 @@ public class Maze extends GameModel{
 	
 	public void groundMaze(Graphics2D g2, BufferedImage sprite) {
 		try {
-			sprite = ImageIO.read(Maze.class.getResource("minecraft grass block.webp"));
+			sprite = ImageIO.read(Maze.class.getResource("OIP (2).png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		super.draw(g2);
+
 		
+		super.draw(g2);
 		
 	}
 	
-	
+	//inspired from ball class.
+//	public void draw(Graphics2D g2) {
+//		g2.drawImage(sprite, getHeight(), getHeight(), getHeight(), getHeight(), getY(), getX(), getWidth(), getHeight(), null);
+//	}
+//	
 	
 	
 }
