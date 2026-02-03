@@ -7,9 +7,12 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.awt.image.*;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import model.GameModel;
 import model.Maze;
@@ -18,24 +21,34 @@ import model.ZombieSprite;
 
 
 
-public class GameComponent extends JComponent {
+
+public class GameComponent extends JPanel {
 
 	
 	
 //	private GameModel model;
 	private PlayerSprite player;
-	private static BufferedImage ground = null;
-	private static boolean triedLoad = false;
+	private Maze wall;
+	private static BufferedImage ground;
+	
 
 //	public GameComponent(GameModel model) {
 //		this.model = model;
 //	}
-	public GameComponent(PlayerSprite player) {
-		this.player= player;
+	public GameComponent() {
+		try {
+			ground = ImageIO.read(getClass().getResource("ground.png"));
+			System.out.println("loaded");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println("ground");
+		}
+		player =  new PlayerSprite(200, 250, 70, 130);
+		wall = new Maze(0,0);
+		
 	
 	}
-
-
 	
 	
 
@@ -45,15 +58,17 @@ public class GameComponent extends JComponent {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
-
+		
 	// Minimal placeholder to test  it’s running
-//	g2.drawString("Final Project Starter: UI is running ✅", 20, 30);
-	
-		
-		
+		g2.drawImage(ground, 0, 0, 600, 600, null);
 		player.draw(g2);
-	
+		wall.drawWalls(g2);
+		
+//		
+
 	// TODO: draw based on model state
 		
 	}
+
 }
+

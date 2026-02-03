@@ -1,34 +1,52 @@
 package model;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Maze class that loads images
+ */
 
-
-public class Maze extends GameModel{
-
-	public Maze(int x, int y, int height, int width, BufferedImage sprite) {
-		super(x, y, height, width, sprite);
-		// TODO Auto-generated constructor stub
-		
-	}
+public class Maze{
+	private int x, y;
+    private static BufferedImage grass = null;
+    private static boolean triedLoad = false;
 	
-	public void groundMaze(Graphics2D g2, BufferedImage sprite) {
+    public Maze(int x, int y) {
+    	this.x = x;
+    	this.y = y;
+        loadSpriteOnce();
+    }
+    
+    private static void loadSpriteOnce() {
+		if (triedLoad) return;
+		triedLoad = true;
 		try {
-			sprite = ImageIO.read(Maze.class.getResource("minecraft grass block.webp"));
-		} catch (IOException e) {
+			grass = ImageIO.read(PlayerSprite.class.getResource("grasstemp.png"));
+			System.out.println("loaded");
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("grass");
 		}
+
 		
-		super.draw(g2);
-		
-		
-	}
-	
+	}	
+    
+    public void drawWalls(Graphics2D g2) {
+    	  
+    	if (grass != null) {
+			g2.drawImage(grass, x, y, 35, 35, null);
+		}else {
+			g2.setColor(Color.GREEN);
+            g2.fillRect(x, y, 80, 80);
+		}
+          
+    }
 	
 	
 	

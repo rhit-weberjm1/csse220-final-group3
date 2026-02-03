@@ -1,6 +1,6 @@
 package ui;
 
-public class GameController {
+public class GameController   {
 	//movement
 	
 }

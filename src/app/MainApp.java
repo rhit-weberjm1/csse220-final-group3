@@ -14,12 +14,15 @@ public class MainApp {
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
-		new MainApp().run();
+			new GameWindow().show();
 		});
 	}
 	
-	public void run() {
-		GameWindow.show();
+//	public void run() {
+//		SwingUtilities.invokeLater(() -> {
+//			new GameWindow().show();//MainApp().run();
+//			});
+	//	GameWindow.show();
 		// Hint: MainApp should not contain game logic or drawing code
-	}
+//	}
 }

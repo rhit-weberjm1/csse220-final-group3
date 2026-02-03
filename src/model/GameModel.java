@@ -19,6 +19,8 @@ public class GameModel {
     public void draw(Graphics2D g2) {
         if (sprite != null) {
             g2.drawImage(sprite, x, y, width, height, null);
+        } else {
+        	g2.drawRect(x, y, width, height);
         }
     }
  
