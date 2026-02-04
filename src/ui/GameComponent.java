@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -89,7 +90,10 @@ public class GameComponent extends JPanel {
 
 		g2.drawImage(ground, 0, 0, 600, 600, null);
 
+		g2.setFont(new Font("comic sans", Font.BOLD, 16));
+		g2.setColor(Color.WHITE);
 		
+		g2.drawString("W A S D to move", 210, 550);
 
 		player.draw(g2);
 
