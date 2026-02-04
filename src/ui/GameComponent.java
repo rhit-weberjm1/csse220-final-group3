@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +21,9 @@ import model.Maze;
 import model.PlayerSprite;
 import model.ZombieSprite;
 
-
+/**
+ * This is where I draw all of the images and  
+ */
 
 
 public class GameComponent extends JPanel {
@@ -30,10 +34,14 @@ public class GameComponent extends JPanel {
 	private PlayerSprite player;
 
 	private Maze wall;
+	
+	private ZombieSprite zombie;
+
 	private static BufferedImage ground;
 	private static boolean triedLoad = false;
 
 	public GameComponent() {
+		 setFocusable(true);
 		try {
 			ground = ImageIO.read(getClass().getResource("ground.png"));
 			System.out.println("loaded");
@@ -44,7 +52,25 @@ public class GameComponent extends JPanel {
 		}
 		player =  new PlayerSprite(200, 250, 70, 130);
 		wall = new Maze(0,0);
-		
+		zombie = new ZombieSprite(400, 200);
+		addKeyListener(new KeyAdapter() {
+			  @Override
+			  public void keyPressed(KeyEvent e) {
+			    if (e.getKeyCode() == KeyEvent.VK_A) {
+			      player.moveLeft(20);
+			      repaint();
+			    }else if (e.getKeyCode() == KeyEvent.VK_D) {
+			    	player.moveRight(20);
+				    repaint();
+			    }else if (e.getKeyCode() == KeyEvent.VK_W) {
+			    	player.moveUp(20);
+				    repaint();
+			    }else if (e.getKeyCode() == KeyEvent.VK_S) {
+			    	player.moveDown(20);
+				    repaint();
+			    }
+			  }
+		});
 	
 	}
 	
@@ -68,9 +94,14 @@ public class GameComponent extends JPanel {
 
 		wall.drawWalls(g2);
 		
+		zombie.draw(g2);
+		
 	// TODO: draw based on model state
 		
 	}
+	
+
+	  
 
 }
 
