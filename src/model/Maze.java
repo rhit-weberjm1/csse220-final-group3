@@ -11,10 +11,13 @@ import javax.imageio.ImageIO;
  * Maze class that loads images
  */
 
+
 public class Maze{
 	private int x, y;
-    private static BufferedImage grass = null;
+    private static BufferedImage grass;
     private static boolean triedLoad = false;
+
+	
 	
     public Maze(int x, int y) {
     	this.x = x;
@@ -34,7 +37,7 @@ public class Maze{
 			System.out.println("grass");
 		}
 
-		
+
 	}	
     
     public void drawWalls(Graphics2D g2) {
@@ -43,11 +46,18 @@ public class Maze{
 			g2.drawImage(grass, x, y, 35, 35, null);
 		}else {
 			g2.setColor(Color.GREEN);
-            g2.fillRect(x, y, 80, 80);
+            g2.fillRect(x, y, 35, 35);
 		}
           
     }
 	
+
+		
+	
+		
+	}
 	
 	
-}
+	
+	
+

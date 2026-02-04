@@ -28,13 +28,11 @@ public class GameComponent extends JPanel {
 	
 //	private GameModel model;
 	private PlayerSprite player;
+
 	private Maze wall;
 	private static BufferedImage ground;
-	
+	private static boolean triedLoad = false;
 
-//	public GameComponent(GameModel model) {
-//		this.model = model;
-//	}
 	public GameComponent() {
 		try {
 			ground = ImageIO.read(getClass().getResource("ground.png"));
@@ -54,18 +52,22 @@ public class GameComponent extends JPanel {
 
 
 
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		
 	// Minimal placeholder to test  it’s running
+
 		g2.drawImage(ground, 0, 0, 600, 600, null);
+
+		
+
 		player.draw(g2);
+
 		wall.drawWalls(g2);
 		
-//		
-
 	// TODO: draw based on model state
 		
 	}

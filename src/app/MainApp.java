@@ -18,11 +18,5 @@ public class MainApp {
 		});
 	}
 	
-//	public void run() {
-//		SwingUtilities.invokeLater(() -> {
-//			new GameWindow().show();//MainApp().run();
-//			});
-	//	GameWindow.show();
-		// Hint: MainApp should not contain game logic or drawing code
-//	}
+
 }

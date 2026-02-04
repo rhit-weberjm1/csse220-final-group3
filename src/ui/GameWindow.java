@@ -17,7 +17,14 @@ public class GameWindow {
 		frame.setContentPane(new GameComponent());
 	}
 
+
 	public  void show() {
+
+
+//		frame.add(new GameComponent(model));
+		
+		
+//		frame.add(new GameComponent(player));
 
 		frame.setSize(600, 600);
 		frame.setLocationRelativeTo(null); // center on screen (nice UX, still minimal)
