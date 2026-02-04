@@ -42,8 +42,7 @@ public class ZombieSprite {
 
 		
 	}	
-	
-
+    
 	
 	public void draw(Graphics2D g2) {
 		if (zombie !=null) {
@@ -57,5 +56,21 @@ public class ZombieSprite {
 		
 		//movement below
 	}
+	
+	public void moveLeft(int step) {
+    	x -= step;
+    }
+    
+    public void moveRight(int step) {
+    	x += step;
+    }
+    
+    public void moveUp (int step) {
+    	y -= step;
+    }
+    
+    public void moveDown (int step) {
+    	y += step;
+    }
 	
 }
