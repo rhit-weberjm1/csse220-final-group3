@@ -15,6 +15,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import model.GameModel;
 import model.Maze;
@@ -39,6 +40,10 @@ public class GameComponent extends JPanel {
 
 	private static BufferedImage ground;
 	private static boolean triedLoad = false;
+	private Timer timer;
+	private int step = 1;
+	private int distanceMoved = 0;
+	private boolean movingLeft = true;
 
 	public GameComponent() {
 		 setFocusable(true);
@@ -53,6 +58,27 @@ public class GameComponent extends JPanel {
 		player =  new PlayerSprite(200, 250, 70, 130);
 		wall = new Maze(0,0);
 		zombie = new ZombieSprite(400, 200);
+		
+		// zombie movement
+		timer = new Timer(20, e -> { 
+			if (movingLeft) {
+				zombie.moveLeft(step); 
+			}
+			else {
+				zombie.moveRight(step);
+			}
+			
+			distanceMoved += step;
+			
+			// switch direction
+			if (distanceMoved >= 100) {
+				movingLeft = !movingLeft;
+				distanceMoved = 0;
+				
+			}
+			repaint(); 
+		});
+		timer.start();
 		
 		addKeyListener(new KeyAdapter() {
 			  @Override
