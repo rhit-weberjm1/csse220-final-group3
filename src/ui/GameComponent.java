@@ -53,6 +53,7 @@ public class GameComponent extends JPanel {
 		player =  new PlayerSprite(200, 250, 70, 130);
 		wall = new Maze(0,0);
 		zombie = new ZombieSprite(400, 200);
+		
 		addKeyListener(new KeyAdapter() {
 			  @Override
 			  public void keyPressed(KeyEvent e) {
