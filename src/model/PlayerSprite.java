@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 //import starter.Ball;
  
-public class PlayerSprite  {
+public class PlayerSprite{
 	private int x, y, height, width, step;
     private static BufferedImage sprite = null;
     private static boolean triedLoad = false;
@@ -66,6 +66,7 @@ public class PlayerSprite  {
     }
     
     
+
 
    
 }
