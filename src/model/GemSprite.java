@@ -6,6 +6,14 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
+
+/*
+ * Draws the gem sprite, a collectible.
+ * 
+ * 
+ */
+
+
 public class GemSprite {
 
 	private int x,y;
@@ -16,21 +24,20 @@ public class GemSprite {
 	private static boolean triedLoad = false;
 	
 	
-	
+	//constructor
 	public GemSprite(int x, int y) {
 		this.x = x;
 		this.y = y;
 		
 	}
-	//will implement image once I have them..
 	
 	
-	
+	//loads in the sprite image
 	 private static void loadSpriteOnce() {
 			if (triedLoad) return;
 			triedLoad = true;
 			try {
-				sprite = ImageIO.read(PlayerSprite.class.getResource("steve.png"));
+				sprite = ImageIO.read(PlayerSprite.class.getResource("player.png"));
 				System.out.println("loaded");
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -39,6 +46,9 @@ public class GemSprite {
 			}
 			
 	 }
+	 
+	 
+	 //draw the sprite image, if no image just draw a little rectangle
 	
 	public void draw(Graphics2D g2) {
 		if (sprite !=null) {
@@ -49,8 +59,6 @@ public class GemSprite {
 			g2.fillRect(x, y, width, height);
 		}
 		
-		
-		//movement below
 	}
 	
 	

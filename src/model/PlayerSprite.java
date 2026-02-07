@@ -8,20 +8,31 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 //import starter.Ball;
+
+
+/*
+ * Builds steve, the player sprite
+ */
  
 public class PlayerSprite{
 	private int x, y, height, width, step;
     private static BufferedImage sprite = null;
     private static boolean triedLoad = false;
+    
+    
+    //constructor
  
     public PlayerSprite(int x, int y, int height, int width) {
     	this.height = height;
     	this.width = width;
     	this.x = x;
     	this.y = y;
+    	
+    	//function call to load in the sprite
         loadSpriteOnce();
     }
  
+    //loads in the sprite if there is one, return false if none
     private static void loadSpriteOnce() {
 		if (triedLoad) return;
 		triedLoad = true;
@@ -37,6 +48,8 @@ public class PlayerSprite{
 		
 	}	
 
+    
+    //draw the sprite, if image or not
 
     public void draw(Graphics2D g2) {
   
@@ -48,6 +61,10 @@ public class PlayerSprite{
 		}
           
     }
+    
+    
+    
+    //player movement
     
     public void moveLeft(int step) {
     	x -= step;

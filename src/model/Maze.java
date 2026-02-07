@@ -18,13 +18,15 @@ public class Maze{
     private static boolean triedLoad = false;
 
 	
-	
+	//is just the ground
     public Maze(int x, int y) {
     	this.x = x;
     	this.y = y;
         loadSpriteOnce();
     }
     
+    
+    //loads the ground
     private static void loadSpriteOnce() {
 		if (triedLoad) return;
 		triedLoad = true;
@@ -40,6 +42,10 @@ public class Maze{
 
 	}	
     
+    
+    //disclaimer, this is a wall, its a bright green grass block    
+    //Use a different png image
+    
     public void drawWalls(Graphics2D g2) {
     	  
     	if (grass != null) {
@@ -48,14 +54,8 @@ public class Maze{
 			g2.setColor(Color.GREEN);
             g2.fillRect(x, y, 35, 35);
 		}
-          
-    }
-	
-
-		
-	
-		
 	}
+}
 	
 	
 	

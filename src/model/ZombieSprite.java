@@ -7,6 +7,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+
+/*
+ * Draws the zombie enemy.
+ */
+
+
 public class ZombieSprite {
 		
 	
@@ -16,7 +22,7 @@ public class ZombieSprite {
 	private static BufferedImage zombie = null;
 	private static boolean triedLoad = false;
 	
-	// add movements up here
+	
 	
 	
 	public ZombieSprite(int x, int y) {
@@ -27,7 +33,9 @@ public class ZombieSprite {
 	}
 	
 	
-	//will implement image once I have them..
+	/*
+	 * Load in zombie sprite
+	 */
     private static void loadSpriteOnce() {
 		if (triedLoad) return;
 		triedLoad = true;
@@ -44,6 +52,8 @@ public class ZombieSprite {
 	}	
     
 	
+    //draw sprite
+    
 	public void draw(Graphics2D g2) {
 		if (zombie !=null) {
 			g2.drawImage(zombie,x,y,width,height,null);

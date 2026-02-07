@@ -23,7 +23,7 @@ import model.PlayerSprite;
 import model.ZombieSprite;
 
 /**
- * This is where I draw all of the images and  
+ * This is where all the sprites and images are drawn
  */
 
 
@@ -80,6 +80,8 @@ public class GameComponent extends JPanel {
 		});
 		timer.start();
 		
+		//key events, button presses
+		
 		addKeyListener(new KeyAdapter() {
 			  @Override
 			  public void keyPressed(KeyEvent e) {
@@ -104,7 +106,7 @@ public class GameComponent extends JPanel {
 	
 
 
-
+	//draw them
 
 	@Override
 	protected void paintComponent(Graphics g) {

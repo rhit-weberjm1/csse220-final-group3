@@ -9,6 +9,8 @@ import model.PlayerSprite;
 import model.ZombieSprite;
 
 
+
+// so you can see all the stuff game component made
 public class GameWindow {
 	JFrame frame;
 	public GameWindow() {
