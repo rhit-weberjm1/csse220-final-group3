@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ import javax.imageio.ImageIO;
  */
 
 
-public class ZombieSprite {
+public class ZombieSprite implements Collidable{
 		
 	
 	private int x,y;
@@ -82,5 +83,26 @@ public class ZombieSprite {
     public void moveDown (int step) {
     	y += step;
     }
+
+
+	@Override
+	public void onCollisionWithWall(Maze wall) {
+		// TODO Auto-generated method stub
+		// add a dx = -dx
+		//and dy=-dy
+	}
+
+
+	@Override
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		Rectangle r = new Rectangle(
+				x,
+				y,
+				height,
+				width
+				);
+		return r;
+	}
 	
 }

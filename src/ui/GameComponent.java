@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.awt.image.*;
 import java.io.File;
 
@@ -44,6 +45,8 @@ public class GameComponent extends JPanel {
 	private int step = 1;
 	private int distanceMoved = 0;
 	private boolean movingLeft = true;
+	
+	private ArrayList<ZombieSprite> zombies = new ArrayList<>();
 
 	public GameComponent() {
 		 setFocusable(true);
@@ -61,6 +64,14 @@ public class GameComponent extends JPanel {
 		
 		// zombie movement
 		timer = new Timer(20, e -> { 
+			
+			
+			//I have the zombie stop moving when he touches steve FOR NOW
+			
+			if(zombie.getBounds().intersects(player.getBounds())) {
+				step = 0;
+			}
+			
 			if (movingLeft) {
 				zombie.moveLeft(step); 
 			}
@@ -74,6 +85,7 @@ public class GameComponent extends JPanel {
 			if (distanceMoved >= 100) {
 				movingLeft = !movingLeft;
 				distanceMoved = 0;
+			
 				
 			}
 			repaint(); 
