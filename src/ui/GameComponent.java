@@ -50,6 +50,7 @@ public class GameComponent extends JPanel {
 
 	public GameComponent() {
 		 setFocusable(true);
+		 requestFocusInWindow();
 		try {
 			ground = ImageIO.read(getClass().getResource("ground.png"));
 			System.out.println("loaded");
@@ -59,7 +60,7 @@ public class GameComponent extends JPanel {
 			System.out.println("ground");
 		}
 		player =  new PlayerSprite(200, 250, 70, 130);
-		wall = new Maze(0,0);
+		wall = new Maze();
 		zombie = new ZombieSprite(400, 200);
 		
 		// zombie movement

@@ -12,14 +12,14 @@ import javax.imageio.ImageIO;
  */
 
 
-public class Maze{
+public class MazeBlock{
 	private int x, y;
-    private static BufferedImage grass;
+    private static BufferedImage block;
     private static boolean triedLoad = false;
 
 	
 	//is just the ground
-    public Maze(int x, int y) {
+    public MazeBlock(int x, int y) {
     	this.x = x;
     	this.y = y;
         loadSpriteOnce();
@@ -31,12 +31,12 @@ public class Maze{
 		if (triedLoad) return;
 		triedLoad = true;
 		try {
-			grass = ImageIO.read(PlayerSprite.class.getResource("grasstemp.png"));
+			block = ImageIO.read(PlayerSprite.class.getResource("diamond-block.png"));
 			System.out.println("loaded");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			System.out.println("grass");
+			System.out.println("wall");
 		}
 
 
@@ -46,13 +46,13 @@ public class Maze{
     //disclaimer, this is a wall, its a bright green grass block    
     //Use a different png image
     
-    public void drawWalls(Graphics2D g2) {
+    public void drawBlock(Graphics2D g2) {
     	  
-    	if (grass != null) {
-			g2.drawImage(grass, x, y, 35, 35, null);
+    	if (block != null) {
+			g2.drawImage(block, x, y, 30, 30, null);
 		}else {
-			g2.setColor(Color.GREEN);
-            g2.fillRect(x, y, 35, 35);
+			g2.setColor(Color.BLUE);
+            g2.fillRect(x, y, 30, 30);
 		}
 	}
 }
