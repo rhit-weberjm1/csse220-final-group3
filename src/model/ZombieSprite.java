@@ -97,10 +97,10 @@ public class ZombieSprite implements Collidable{
 	public Rectangle getBounds() {
 		// TODO Auto-generated method stub
 		Rectangle r = new Rectangle(
-				x,
+				x +20,
 				y,
-				height,
-				width
+				35,
+				75
 				);
 		return r;
 	}

@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -23,6 +24,10 @@ public class MazeBlock{
     	this.x = x;
     	this.y = y;
         loadSpriteOnce();
+    }
+    
+    public Rectangle getBounds() {
+    	return new Rectangle(x, y, 30, 30);
     }
     
     

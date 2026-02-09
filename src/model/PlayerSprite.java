@@ -21,6 +21,10 @@ public class PlayerSprite implements Collidable{
 	private int x, y, height, width, step;
     private static BufferedImage sprite = null;
     private static boolean triedLoad = false;
+    private int lives = 3;
+    private boolean invincible = false;
+    private int timeInvincible;
+    private int gems;
     
     
     //constructor
@@ -65,6 +69,8 @@ public class PlayerSprite implements Collidable{
           
     }
     
+
+    
     
     
     //player movement
@@ -85,27 +91,68 @@ public class PlayerSprite implements Collidable{
     	y += step;
     }
 
+    public void move(int dx, int dy) {
+		x += dx;
+		y += dy;
+	}
+
+	
+	
+
+////	
+//	public void onCollisionWithWall(Maze wall) {
+//		// TODO Auto-generated method stub
+//		step = 0;
+//	}
+//    
+
+    public void loseLife() {
+    	if (invincible) return;
+    	
+    	lives--;
+    	invincible = true;
+    	timeInvincible = (int) (System.currentTimeMillis() + 1000);
+    	
+    }
+    
+    public void updateStatus() {
+    	if (invincible && System.currentTimeMillis() > timeInvincible) {
+    		invincible = false;
+    	}
+    }
+    
+    public int getLives() {
+    	return lives;
+    }
+    
+    public void collectGem() {
+    	gems++;
+    	
+    }
+    
+    public int getGems() {
+    	return gems;
+    }
 
 	@Override
 	public Rectangle getBounds() {
-		Rectangle r = new Rectangle(
-				x,
-				y,
-				height,
-				width
-				);
+		Rectangle r = new Rectangle(x + 50,y,35,75);
 		return r;
 	}
+	
+	public Rectangle getFutureBounds(int dx, int dy) {
+	    return new Rectangle(x + dx, y + dy, width, height);
+	}
 
-//	@Override
+	@Override
 	public void onCollisionWithWall(Maze wall) {
 		// TODO Auto-generated method stub
-		step = 0;
+		
 	}
     
     
     
-    
+
 
    
 }
