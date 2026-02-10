@@ -268,14 +268,14 @@ public class GameComponent extends JPanel {
 		    g2.drawString("GAME OVER", 170, 300);
 		}
 		
-		// hitbox indicators
-//		g2.setColor(Color.RED);
-//		g2.draw(player.getBounds());
-//
-//		g2.setColor(Color.GREEN);
-//		g2.draw(zombie.getBounds());
-//		g2.draw(zombie2.getBounds());
-//		g2.draw(zombie3.getBounds());
+		//hitbox indicators
+		g2.setColor(Color.RED);
+		g2.draw(player.getBounds());
+
+		g2.setColor(Color.GREEN);
+		g2.draw(zombie.getBounds());
+		g2.draw(zombie2.getBounds());
+		g2.draw(zombie3.getBounds());
 
 		
 		
