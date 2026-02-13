@@ -2,11 +2,21 @@ package model;
  
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+
+/*
+ * Game model builds the sprite as a rectangle
+ * and then gets and sets methods for the player to move
+ */
+
  
 public class GameModel {
     private int x, y;
     private int width, height;
     private BufferedImage sprite;
+    
+    
+    //constructor
     
     public GameModel(int x, int y, int width, int height, BufferedImage sprite) {
         this.x = x;
@@ -15,6 +25,9 @@ public class GameModel {
         this.height = height;
         this.sprite = sprite;
     }
+    
+    
+    //draw the sprite
     
     public void draw(Graphics2D g2) {
         if (sprite != null) {
