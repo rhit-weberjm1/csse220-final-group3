@@ -4,65 +4,43 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
-/**
- * Maze class that loads images
- */
-
-
-public class MazeBlock{
-	private int x, y;
+public class MazeBlock {
+    private int x, y;
     private static BufferedImage block;
     private static boolean triedLoad = false;
+    
+    private static final int SIZE = 50; 
 
-	
-	//is just the ground
     public MazeBlock(int x, int y) {
-    	this.x = x;
-    	this.y = y;
+        this.x = x;
+        this.y = y;
         loadSpriteOnce();
     }
     
     public Rectangle getBounds() {
-    	return new Rectangle(x, y, 30, 30);
+        return new Rectangle(x, y, SIZE, SIZE);
     }
     
-    
-    //loads the ground
     private static void loadSpriteOnce() {
-		if (triedLoad) return;
-		triedLoad = true;
-		try {
-			block = ImageIO.read(PlayerSprite.class.getResource("diamond-block.png"));
-			System.out.println("loaded");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.out.println("wall");
-		}
-
-
-	}	
-    
-    
-    //disclaimer, this is a wall, its a bright green grass block    
-    //Use a different png image
+        if (triedLoad) return;
+        triedLoad = true;
+        try {
+            block = ImageIO.read(MazeBlock.class.getResource("diamond-block.png"));
+        } catch (Exception e) {
+            System.out.println("Block image not found, using color fallback");
+        }
+    }   
     
     public void drawBlock(Graphics2D g2) {
-    	  
-    	if (block != null) {
-			g2.drawImage(block, x, y, 30, 30, null);
-		}else {
-			g2.setColor(Color.BLUE);
-            g2.fillRect(x, y, 30, 30);
-		}
-	}
+        if (block != null) {
+            g2.drawImage(block, x, y, SIZE, SIZE, null);
+        } else {
+            g2.setColor(Color.CYAN);
+            g2.fillRect(x, y, SIZE, SIZE);
+            g2.setColor(Color.BLUE);
+            g2.drawRect(x, y, SIZE, SIZE);
+        }
+    }
 }
-	
-	
-	
-	
-

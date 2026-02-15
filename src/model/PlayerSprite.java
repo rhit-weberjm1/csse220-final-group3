@@ -1,169 +1,103 @@
 package model;
- 
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
-//import jdk.internal.org.jline.terminal.TerminalBuilder.SystemOutput;
-
-//import starter.Ball;
-
-
-/*
- * Builds steve, the player sprite
- */
- 
-public class PlayerSprite implements Collidable{
-	private int x, y, height, width, step;
+public class PlayerSprite implements Collidable {
+    private int x, y, height, width;
     private static BufferedImage sprite = null;
     private static boolean triedLoad = false;
     private int lives = 3;
+    
+    // Invincibility Logic
     private boolean invincible = false;
-    private int timeInvincible;
+    private long timeInvincible; 
+
     private int gems;
-    
-    
-    //constructor
- 
+
     public PlayerSprite(int x, int y, int height, int width) {
-    	this.height = height;
-    	this.width = width;
-    	this.x = x;
-    	this.y = y;
-    	
-    	//function call to load in the sprite
+        this.height = height;
+        this.width = width;
+        this.x = x;
+        this.y = y;
         loadSpriteOnce();
     }
- 
-    //loads in the sprite if there is one, return false if none
+
     private static void loadSpriteOnce() {
-		if (triedLoad) return;
-		triedLoad = true;
-		try {
-			sprite = ImageIO.read(PlayerSprite.class.getResource("steve.png"));
-			System.out.println("loaded");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			System.out.println("sprite");
-		}
-
-		
-	}	
-
-    
-    //draw the sprite, if image or not
+        if (triedLoad) return;
+        triedLoad = true;
+        try {
+            sprite = ImageIO.read(PlayerSprite.class.getResource("steve.png"));
+        } catch (Exception e) {
+            System.out.println("player sprite missing");
+        }
+    }
 
     public void draw(Graphics2D g2) {
-  
-    	if (sprite != null) {
-			g2.drawImage(sprite, x, y, width, height, null);
-		}else {
-			g2.setColor(Color.BLUE);
-            g2.fillRect(x, y, width, height);
-		}
-          
-    }
-    
+        // Visual indicator for invincibility
+        if (invincible) {
+            g2.setColor(Color.RED);
+            g2.fillRect(x, y, width, height); // Draw red box behind/over player to show damage
+            return; 
+        }
 
-    
-    
-    
-    //player movement
-    
-    public void moveLeft(int step) {
-    	x -= step;
-    }
-    
-    public void moveRight(int step) {
-    	x += step;
-    }
-    
-    public void moveUp (int step) {
-    	y -= step;
-    }
-    
-    public void moveDown (int step) {
-    	y += step;
+        if (sprite != null) {
+            g2.drawImage(sprite, x, y, width, height, null);
+        } else {
+            g2.setColor(Color.BLUE);
+            g2.fillRect(x, y, width, height);
+        }
     }
 
     public void move(int dx, int dy) {
-		x += dx;
-		y += dy;
-	}
+        x += dx;
+        y += dy;
+    }
 
-	public int getPlayerX() {
-		return x;
-	}
-	
-	public int getPlayerY() {
-		return y;
-	}
-	
+    // --- THESE WERE MISSING ---
+    public void setX(int x) { this.x = x; }
+    public void setY(int y) { this.y = y; }
+    // --------------------------
 
-////	
-//	public void onCollisionWithWall(Maze wall) {
-//		// TODO Auto-generated method stub
-//		step = 0;
-//	}
-//    
+    public int getPlayerX() { return x; }
+    public int getPlayerY() { return y; }
 
     public void loseLife() {
-    	if (invincible) return;
-    	
-    	lives--;
-    	invincible = true;
-    	timeInvincible = (int) (System.currentTimeMillis() + 1000);
-    	
+        if (invincible) return;
+        
+        lives--;
+        invincible = true;
+        timeInvincible = System.currentTimeMillis() + 1500; // 1.5 seconds invincibility
+        System.out.println("Hit! Lives left: " + lives);
     }
-    
+
     public void updateStatus() {
-    	if (invincible && System.currentTimeMillis() > timeInvincible) {
-    		invincible = false;
-    	}
-    }
-    
-    public int getLives() {
-    	return lives;
-    }
-    
-    public void collectGem() {
-    	gems++;
-    	
-    }
-    
-    public int getGems() {
-    	return gems;
+        if (invincible && System.currentTimeMillis() > timeInvincible) {
+            invincible = false;
+        }
     }
 
-	@Override
-	public Rectangle getBounds() {
-		Rectangle r = new Rectangle(x + 50,y,35,75);
-		return r;
-	}
-	
-	public Rectangle getFutureBounds(int dx, int dy) {
-	    return new Rectangle(x + dx, y + dy, width, height);
-	}
-	
-	public Rectangle catapultBound() {
-		return new Rectangle(x-90, y, width+90, height);
-	}
+    public int getLives() { return lives; }
 
-	@Override
-	public void onCollisionWithWall(Maze wall) {
-		// TODO Auto-generated method stub
-		
-	}
-    
-	
-    
-    
+    public void collectGem() { gems++; }
+    public int getGems() { return gems; }
 
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(x + 5, y + 5, width - 10, height - 10);
+    }
 
-   
+    public Rectangle getFutureBounds(int dx, int dy) {
+        return new Rectangle(x + dx, y + dy, width, height);
+    }
+    
+    public Rectangle catapultBound() {
+        return new Rectangle(x - 90, y, width + 90, height);
+    }
+
+    @Override
+    public void onCollisionWithWall(Maze wall) { }
 }

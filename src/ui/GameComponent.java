@@ -4,319 +4,222 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.awt.image.*;
-import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import model.GameModel;
 import model.Maze;
 import model.PlayerSprite;
 import model.ZombieSprite;
 import model.GemSprite;
 
-/**
- * This is where all the sprites and images are drawn
- */
-
-
 public class GameComponent extends JPanel {
 
-	
-	
-//	private GameModel model;
-	private PlayerSprite player;
+    private enum State { START_SCREEN, PLAYING, GAME_OVER, WIN }
+    private State currentState = State.START_SCREEN;
 
-	private Maze wall;
-	
-	private ZombieSprite zombie;
-	private ZombieSprite zombie2;
-	private ZombieSprite zombie3;
-	
-	private GemSprite gem1;
-	private GemSprite gem2;
-	private GemSprite gem3;
+    private PlayerSprite player;
+    private Maze maze;
+    private ArrayList<ZombieSprite> zombies;
+    private ArrayList<GemSprite> gems;
+    private static BufferedImage ground;
+    
+    private boolean upPressed, downPressed, leftPressed, rightPressed;
+    private Timer timer;
+    private int currentLevel = 1;
 
+    public GameComponent() {
+        setFocusable(true);
+        try {
+            ground = ImageIO.read(getClass().getResource("ground.png"));
+        } catch (Exception e) { }
 
-	private static BufferedImage ground;
-	private static boolean triedLoad = false;
-	private Timer timer;
-	private int step = 1;
-	private int distanceMoved = 0;
-	private boolean movingLeft = true;
-	private boolean gameOver = false;
-	private boolean touchingZombie = false;
-	
-	private ArrayList<ZombieSprite> zombies = new ArrayList<>();
+        loadLevel(1);
 
-	public GameComponent() {
-		 setFocusable(true);
-		try {
-			ground = ImageIO.read(getClass().getResource("ground.png"));
-			//System.out.println("loaded");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			//System.out.println("ground");
-		}
-		player =  new PlayerSprite(10, 480, 70, 130);
-		wall = new Maze();
-		zombie = new ZombieSprite(400, 200);
-		zombie2 = new ZombieSprite(200,400);
-		zombie3 = new ZombieSprite(400, 60);
-		gem1 = new GemSprite(400, 425);
-		gem2 = new GemSprite(150, 350);
-		gem3 = new GemSprite(350, 100);
-		zombies.add(zombie);
-		zombies.add(zombie2);
-		zombies.add(zombie3);
-		
-		
-		
-		// zombie movement
-		timer = new Timer(10, e -> { 
-			
-			if (player.getLives() <= 0) {
-				gameOver = true;
-				timer.stop();
-			}
-			
-			player.updateStatus();
-			//I have the zombie stop moving when he touches steve FOR NOW
-			
-			
-			if (movingLeft) {
-				zombie.moveLeft(step); 
-			}
-			else {
-				zombie.moveRight(step);
-			}
-			
-			distanceMoved += step;
-			
-			// switch direction
-			if (distanceMoved >= 100) {
-				movingLeft = !movingLeft;
-				distanceMoved = 0;
-			
-				
-			}
-			
-			
-			if (movingLeft) {
-				zombie2.moveLeft(step); 
-			}
-			else {
-				zombie2.moveRight(step);
-			}
-			
-			distanceMoved += step;
-			
-			// switch direction
-			if (distanceMoved >= 100) {
-				movingLeft = !movingLeft;
-				distanceMoved = 0;
-			
-				
-			}
-			
-			
-			if (movingLeft) {
-				zombie3.moveLeft(step); 
-			}
-			else {
-				zombie3.moveRight(step);
-			}
-			
-			boolean currentlyTouchingZombie =
-			        zombie.getBounds().intersects(player.getBounds()) ||
-			        zombie2.getBounds().intersects(player.getBounds()) ||
-			        zombie3.getBounds().intersects(player.getBounds());
+        // Timer running at ~60 FPS
+        timer = new Timer(16, e -> { 
+            if (currentState == State.PLAYING) {
+                updateGameLogic();
+            }
+            repaint(); 
+        });
+        timer.start();
 
-			if (currentlyTouchingZombie && !touchingZombie) {
-			    player.loseLife();
-			}
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) { 
+                int k = e.getKeyCode();
+                
+                if (currentState == State.START_SCREEN) {
+                    if (k == KeyEvent.VK_ENTER) currentState = State.PLAYING;
+                }
+                else if (currentState == State.GAME_OVER || currentState == State.WIN) {
+                    if (k == KeyEvent.VK_R) restartGame(); 
+                }
+                else if (currentState == State.PLAYING) {
+                    if (k == KeyEvent.VK_W) upPressed = true;
+                    if (k == KeyEvent.VK_S) downPressed = true;
+                    if (k == KeyEvent.VK_A) leftPressed = true;
+                    if (k == KeyEvent.VK_D) rightPressed = true;
+                    if (k == KeyEvent.VK_SPACE) handleCatapult();
+                }
+            } 
 
-			// update state
-			touchingZombie = currentlyTouchingZombie;
+            @Override
+            public void keyReleased(KeyEvent e) {
+                int k = e.getKeyCode();
+                if (k == KeyEvent.VK_W) upPressed = false;
+                if (k == KeyEvent.VK_S) downPressed = false;
+                if (k == KeyEvent.VK_A) leftPressed = false;
+                if (k == KeyEvent.VK_D) rightPressed = false;
+            }
+        });
+    }
 
-			distanceMoved += step;
-			
-			// switch direction
-			if (distanceMoved >= 200) {
-				movingLeft = !movingLeft;
-				distanceMoved = 0;	
-			}
-			
-			if (!gem1.isCollected() && player.getBounds().intersects(gem1.getBounds())) {
-				player.collectGem();
-				gem1.collect();
-			}
-			
-			if (!gem2.isCollected() && player.getBounds().intersects(gem2.getBounds())) {
-				player.collectGem();
-				gem2.collect();
-			}
-			
-			if (!gem3.isCollected() && player.getBounds().intersects(gem3.getBounds())) {
-				player.collectGem();
-				gem3.collect();
-			}
-			repaint(); 
-		});
-		timer.start();
-		
-		//key events, button presses
-		
-		addKeyListener(new KeyAdapter() {
-			  @Override
-			  public void keyPressed(KeyEvent e) { 
-				  if (gameOver) return;
-				  if (e.getKeyCode() == KeyEvent.VK_A) { 
-						  player.moveLeft(20); 
-						  repaint();
-				  }
-				  else if (e.getKeyCode() == KeyEvent.VK_D) {
-						  player.moveRight(20); 
-						  repaint();
-				  }
-				  else if (e.getKeyCode() == KeyEvent.VK_W) { 
-						  player.moveUp(20); 
-						  repaint(); 
-				  }
-				  else if (e.getKeyCode() == KeyEvent.VK_S) { 
-						  player.moveDown(20); 
-						  repaint(); 
-				  }else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					  for(int i = 0; i < zombies.size(); i++) {
-						  if (zombies.get(i).getBounds().intersects(player.catapultBound())){
-							  if (player.getPlayerX() > zombies.get(i).getZombieX()) {
-								  zombies.get(i).pushZombieFoward();
-							  }else {
-								  zombies.get(i).pushZombieBack();
-							  }
-							 
-						  }
-					  }
-					  
-					  repaint(); 
-				  }
-//				  if (e.getKeyCode() == KeyEvent.VK_A) {
-//					    if (!wall.collides(player.getFutureBounds(-20, 0))) {
-//					        player.moveLeft(20);
-//					    }
-//					}
-//					else if (e.getKeyCode() == KeyEvent.VK_D) {
-//					    if (!wall.collides(player.getFutureBounds(20, 0))) {
-//					        player.moveRight(20);
-//					    }
-//					}
-//					else if (e.getKeyCode() == KeyEvent.VK_W) {
-//					    if (!wall.collides(player.getFutureBounds(0, -20))) {
-//					        player.moveUp(20);
-//					    }
-//					}
-//					else if (e.getKeyCode() == KeyEvent.VK_S) {
-//					    if (!wall.collides(player.getFutureBounds(0, 20))) {
-//					        player.moveDown(20);
-//					    }
-//					}
-//					repaint();
+    private void loadLevel(int level) {
+        // FIX: Player size set to 40, 40 to fit in 50x50 maze blocks
+        player = new PlayerSprite(60, 60, 40, 40); 
+        
+        maze = new Maze("level" + level + ".txt");
+        zombies = maze.getLoadedZombies();
+        gems = maze.getLoadedGems();
+        
+        // Safety check if level is empty
+        if (zombies.isEmpty() && level == 1) {
+            zombies.add(new ZombieSprite(400, 200));
+        }
+    }
 
-			  } 
-			  });
-	
-	}
-	
+    private void restartGame() {
+        currentLevel = 1;
+        loadLevel(1);
+        currentState = State.PLAYING;
+    }
 
-	
-	
+    private void updateGameLogic() {
+        if (player.getLives() <= 0) {
+            currentState = State.GAME_OVER;
+            return;
+        }
 
-	//draw them
+        player.updateStatus();
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		
-	// Minimal placeholder to test  it’s running
+        // FIX: Speed increased to 15. 
+        // This is "Arcade Speed". Very fast response.
+        int speed = 15; 
+        
+        int dx = 0;
+        int dy = 0;
 
+        // ... rest of movement logic is the same ...
+        if (upPressed) dy -= speed;
+        if (downPressed) dy += speed;
+        if (leftPressed) dx -= speed;
+        if (rightPressed) dx += speed;
 
-		g2.drawImage(ground, 0, 0, 600, 600, null);
+        if (dx != 0 || dy != 0) {
+            if (!maze.collides(player.getFutureBounds(dx, 0))) player.move(dx, 0);
+            if (!maze.collides(player.getFutureBounds(0, dy))) player.move(0, dy);
+        }
 
-		
+        // Zombie Logic
+        for (ZombieSprite z : zombies) {
+            z.update(maze); // FIX: Pass maze to zombie so it sees walls
+            
+            if (z.getBounds().intersects(player.getBounds())) {
+                player.loseLife();
+            }
+        }
 
-		player.draw(g2);
+        // Gem Logic
+        boolean allCollected = true;
+        for (GemSprite g : gems) {
+            if (!g.isCollected()) {
+                allCollected = false;
+                if (player.getBounds().intersects(g.getBounds())) {
+                    player.collectGem();
+                    g.collect();
+                }
+            }
+        }
+        
+        if (allCollected) {
+            currentLevel++;
+            // Try to load next level, if fails, you win
+            try {
+                // Check if file exists by trying to load a dummy maze
+                Maze nextMaze = new Maze("level" + currentLevel + ".txt");
+                if (nextMaze.getLoadedGems().isEmpty() && nextMaze.getLoadedZombies().isEmpty()) {
+                     throw new Exception("Level empty");
+                }
+                loadLevel(currentLevel);
+                player.setX(60);
+                player.setY(60);
+            } catch (Exception e) {
+                currentState = State.WIN;
+            }
+        }
+    }
 
-		wall.drawWalls(g2);
-		
-		zombie.draw(g2);
-		zombie2.draw(g2);
-		zombie3.draw(g2);
-		
-		g2.setFont(new Font("comic sans", Font.BOLD, 16));
-		Rectangle wordRect = new Rectangle(20, 5, 80, 40);
-		g2.draw(wordRect);
-		g2.setColor(Color.CYAN);
-		g2.fill(wordRect);
-		g2.setColor(Color.BLACK);
-		g2.drawString("Lives: " + player.getLives(), 20, 20);
-		g2.drawString("Gems: " + player.getGems(), 20, 40);
-		
-		if (!gem1.isCollected()) {
-			gem1.draw(g2);
-		}
-		
-		if (!gem2.isCollected()) {
-			gem2.draw(g2);
-		}
-		
-		if (!gem3.isCollected()) {
-			gem3.draw(g2);
-		}
-		
-		if (gameOver) {
-			g2.setColor(Color.BLACK);
-		    g2.fillRect(0, 0, getWidth(), getHeight());
+    private void handleCatapult() {
+        for (ZombieSprite z : zombies) {
+            if (z.getBounds().intersects(player.catapultBound())) {
+                if (player.getPlayerX() > z.getZombieX()) z.pushZombieForward();
+                else z.pushZombieBack();
+            }
+        }
+    }
 
-		    g2.setColor(Color.RED);
-		    g2.setFont(g2.getFont().deriveFont(48f));
-		    g2.drawString("GAME OVER", 170, 300);
-		}
-		
-		//hitbox indicators
-		g2.setColor(Color.RED);
-		g2.draw(player.getBounds());
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
 
-		g2.setColor(Color.GREEN);
-		g2.draw(zombie.getBounds());
-		g2.draw(zombie2.getBounds());
-		g2.draw(zombie3.getBounds());
+        if (currentState == State.PLAYING || currentState == State.GAME_OVER || currentState == State.WIN) {
+             if (ground != null) g2.drawImage(ground, 0, 0, getWidth(), getHeight(), null);
+             else {
+                 g2.setColor(Color.LIGHT_GRAY);
+                 g2.fillRect(0, 0, getWidth(), getHeight());
+             }
 
-		
-		
-		g2.setColor(Color.WHITE);
+             maze.drawWalls(g2);
+             for (GemSprite gem : gems) gem.draw(g2);
+             for (ZombieSprite z : zombies) z.draw(g2);
+             player.draw(g2);
 
-		g2.drawString("W A S D to move, SPACE to catapult a zombie", 210, 550);
+             g2.setFont(new Font("Arial", Font.BOLD, 18));
+             g2.setColor(Color.WHITE);
+             g2.drawString("Lives: " + player.getLives(), 20, 30);
+             g2.drawString("Level: " + currentLevel, 120, 30);
+             g2.drawString("Gems: " + player.getGems(), 220, 30);
+        }
 
-	
-	// TODO: draw based on model state
-		
-	}
-	
-
-	  
-
+        // Overlays
+        if (currentState == State.START_SCREEN) {
+            drawOverlay(g2, "ZOMBIE MAZE", "WASD to Move. SPACE to Push.", "Press ENTER to Start", Color.CYAN);
+        }
+        else if (currentState == State.GAME_OVER) {
+            drawOverlay(g2, "GAME OVER", "The zombies got you!", "Press R to Restart", Color.RED);
+        }
+        else if (currentState == State.WIN) {
+            drawOverlay(g2, "VICTORY!", "You collected all gems!", "Press R to Restart", Color.GREEN);
+        }
+    }
+    
+    private void drawOverlay(Graphics2D g2, String title, String sub1, String sub2, Color color) {
+        g2.setColor(new Color(0, 0, 0, 180));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.setColor(color);
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        g2.drawString(title, 180, 250);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        g2.drawString(sub1, 200, 300);
+        g2.drawString(sub2, 230, 350);
+    }
 }
-
