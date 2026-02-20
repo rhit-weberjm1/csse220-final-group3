@@ -60,6 +60,7 @@ public class Maze {
 		}
 	}
 	
+	// rectangle r is steve's hitbox
 	public boolean collides(Rectangle r) {
 		for (MazeBlock block : blocks) {
 			if (block.getBounds().intersects(r)) {
